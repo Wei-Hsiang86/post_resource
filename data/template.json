@@ -1,0 +1,153 @@
+{
+  "resourceType" : "Patient",
+  "id" : "pat-example",
+  "meta" : {
+    "profile" : [
+      "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Patient-twcore"
+    ]
+  },
+  "extension" : [
+    {
+      "url" : "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/person-age",
+      "valueAge" : {
+        "value" : 32,
+        "system" : "http://unitsofmeasure.org",
+        "code" : "a"
+      }
+    },
+    {
+      "extension" : [
+        {
+          "url" : "code",
+          "valueCodeableConcept" : {
+            "coding" : [
+              {
+                "system" : "urn:iso:std:iso:3166",
+                "code" : "TW"
+              }
+            ]
+          }
+        }
+      ],
+      "url" : "http://hl7.org/fhir/StructureDefinition/patient-nationality"
+    }
+  ],
+  "identifier" : [
+    {
+      "use" : "official",
+      "type" : {
+        "coding" : [
+          {
+            "system" : "http://terminology.hl7.org/CodeSystem/v2-0203",
+            "code" : "NNxxx"
+          }
+        ]
+      },
+      "system" : "http://www.moi.gov.tw",
+      "value" : "A123456789"
+    }
+  ],
+  "active" : true,
+  "name" : [
+    {
+      "use" : "official",
+      "text" : "陳加玲",
+      "family" : "Chen",
+      "given" : [
+        "Chia Lin"
+      ]
+    }
+  ],
+  "telecom" : [
+    {
+      "system" : "phone",
+      "value" : "0911327999",
+      "use" : "mobile",
+      "period" : {
+        "start" : "2022-07-31",
+        "end" : "2024-07-31"
+      }
+    }
+  ],
+  "gender" : "female",
+  "birthDate" : "1990-01-01",
+  "address" : [
+    {
+      "text" : "臺北市大同區大有里19鄰承德路三段52巷6弄210號2樓B室",
+      "line" : [
+        "承德路"
+      ],
+      "city" : "大同區",
+      "district" : "臺北市",
+      "_postalCode" : {
+        "extension" : [
+          {
+            "url" : "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/tw-postal-code",
+            "valueCodeableConcept" : {
+              "coding" : [
+                {
+                  "system" : "https://twcore.mohw.gov.tw/ig/twcore/CodeSystem/postal-code3-tw",
+                  "code" : "103"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "country" : "TW"
+    }
+  ],
+  "maritalStatus" : {
+    "coding" : [
+      {
+        "system" : "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code" : "U"
+      }
+    ]
+  },
+  "contact" : [
+    {
+      "relationship" : [
+        {
+          "coding" : [
+            {
+              "system" : "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+              "code" : "FTH"
+            }
+          ]
+        }
+      ],
+      "name" : {
+        "use" : "official",
+        "text" : "李立偉",
+        "family" : "Li",
+        "given" : [
+          "Li Wei"
+        ]
+      },
+      "telecom" : [
+        {
+          "system" : "phone",
+          "value" : "0917159753",
+          "use" : "mobile",
+          "period" : {
+            "start" : "2022-07-31",
+            "end" : "2024-07-31"
+          }
+        }
+      ]
+    }
+  ],
+  "communication" : [
+    {
+      "language" : {
+        "coding" : [
+          {
+            "system" : "urn:ietf:bcp:47",
+            "code" : "zh-TW"
+          }
+        ]
+      }
+    }
+  ]
+}

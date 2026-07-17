@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# 把 bin/generate 產出的 JSON 逐一 POST 到 FHIR server。
+set -euo pipefail
+
+dir="./output"
+url="${FHIR_BASE_URL:-}"
+resource_type="Patient"
+
+usage() {
+  echo "Usage: $(basename "$0") --url <FHIR base URL> [--dir <output dir>] [--resource-type <type>]" >&2
+  echo "  --url can also be set via FHIR_BASE_URL env var" >&2
+  exit 1
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dir)
+      dir="$2"
+      shift 2
+      ;;
+    --url)
+      url="$2"
+      shift 2
+      ;;
+    --resource-type)
+      resource_type="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage
+      ;;
+  esac
+done
+
+if [[ -z "$url" ]]; then
+  echo "Error: --url is required (or set FHIR_BASE_URL)" >&2
+  usage
+fi
+
+if ! command -v curl >/dev/null 2>&1; then
+  echo "Error: curl is required but not installed." >&2
+  exit 1
+fi
+
+if ! compgen -G "$dir/*.json" >/dev/null; then
+  echo "Error: no .json files found in $dir" >&2
+  exit 1
+fi
+
+endpoint="${url%/}/${resource_type}"
+fail_count=0
+
+for f in "$dir"/*.json; do
+  response="$(curl -s -w $'\n%{http_code}' -X POST \
+    -H "Content-Type: application/fhir+json" \
+    --data-binary @"$f" \
+    "$endpoint")"
+  http_code="$(tail -n1 <<< "$response")"
+  body="$(sed '$d' <<< "$response")"
+
+  echo "POST $f -> $endpoint : HTTP $http_code"
+  if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
+    fail_count=$((fail_count + 1))
+    echo "$body"
+  fi
+done
+
+if [[ "$fail_count" -gt 0 ]]; then
+  echo "Done with $fail_count failure(s)." >&2
+  exit 1
+fi
+
+echo "Done, all requests succeeded."

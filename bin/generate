@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# 入口腳本：呼叫 scripts/substitute.sh N 次，產生假資料 Patient JSON。
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+template="$PROJECT_ROOT/data/template.json"
+count=1
+out="$PWD/output"
+
+usage() {
+  echo "Usage: $(basename "$0") [--template <path>] [--count <N>] [--out <dir>]" >&2
+  exit 1
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --template)
+      template="$2"
+      shift 2
+      ;;
+    --count)
+      count="$2"
+      shift 2
+      ;;
+    --out)
+      out="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage
+      ;;
+  esac
+done
+
+if ! command -v jq >/dev/null 2>&1 && [[ ! -x "$PROJECT_ROOT/vendor/jq-linux-amd64" ]]; then
+  echo "Error: jq not found on PATH and no vendored binary at vendor/jq-linux-amd64" >&2
+  exit 1
+fi
+
+if [[ ! -f "$template" ]]; then
+  echo "Error: template not found: $template" >&2
+  exit 1
+fi
+
+if ! [[ "$count" =~ ^[0-9]+$ ]] || [[ "$count" -lt 1 ]]; then
+  echo "Error: --count must be a positive integer" >&2
+  exit 1
+fi
+
+mkdir -p "$out"
+
+for ((i = 1; i <= count; i++)); do
+  n=$(printf '%03d' "$i")
+  output_file="$out/pat-fake-$n.json"
+  "$PROJECT_ROOT/scripts/substitute.sh" "$template" "$output_file"
+  echo "Generated: $output_file"
+done

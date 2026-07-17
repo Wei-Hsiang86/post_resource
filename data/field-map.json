@@ -1,0 +1,18 @@
+[
+  { "path": ".name[0].text", "type": "name" },
+  { "path": ".name[0].family", "type": "family_name" },
+  { "path": ".name[0].given[0]", "type": "given_name" },
+  { "path": ".telecom[0].value", "type": "phone" },
+  { "path": ".identifier[0].value", "type": "national_id" },
+  { "path": ".gender", "type": "gender" },
+  { "path": ".address[0].text", "type": "address_text" },
+  { "path": ".address[0].line[0]", "type": "address_line" },
+  { "path": ".address[0].city", "type": "address_city" },
+  { "path": ".address[0].district", "type": "address_district" },
+  { "path": ".address[0]._postalCode.extension[0].valueCodeableConcept.coding[0].code", "type": "address_postal_code" },
+  { "path": ".contact[0].name.text", "type": "name" },
+  { "path": ".contact[0].name.family", "type": "family_name" },
+  { "path": ".contact[0].name.given[0]", "type": "given_name" },
+  { "path": ".contact[0].telecom[0].value", "type": "phone" },
+  { "path": ".contact[0].relationship[0].coding[0].code", "type": "relationship_code" }
+]
