@@ -25,7 +25,7 @@
 ## POST 到 FHIR server
 
 ```bash
-./bin/post --url <FHIR base URL> [--dir <output dir>] [--resource-type <type>]
+./bin/post --url <FHIR base URL> [--dir <output dir>] [--resource-type <type>] [--token <bearer token>]
 ```
 
 | 參數 | 說明 | 預設 |
@@ -33,6 +33,9 @@
 | `--url` | FHIR server base URL（也可用 `FHIR_BASE_URL` 環境變數） | 必填 |
 | `--dir` | 要 POST 的 JSON 檔案目錄 | `./output` |
 | `--resource-type` | resource 類型,決定 POST 到哪個 endpoint | `Patient` |
+| `--token` | Bearer token,帶了才會加 `Authorization` header（也可用 `FHIR_TOKEN` 環境變數） | 無 |
+
+`--url` 結尾要不要加 `/` 都可以,腳本會自動處理（`http://host/fhir` 和 `http://host/fhir/` 都會接成 `http://host/fhir/Patient`）。但 `http://`／`https://` 這段**建議明確帶上**,不要省略——雖然 curl 在沒給 scheme 時會預設補成 `http://`,但那是 curl 的實作細節而不是這支腳本保證的行為,漏寫容易在該用 `https` 的地方誤送明文請求。
 
 會把目錄裡每個 `.json` 逐一 POST 過去,印出每筆的 HTTP status;有任何一筆失敗（非 2xx）會印出 response body,並在結束時以非 0 exit code 回報。
 
